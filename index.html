@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GAME HUB</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#0f1117;
+  color:white;
+  display:flex;
+  height:100vh;
+  overflow:hidden;
+}
+
+.sidebar{
+  width:230px;
+  background:#151925;
+  padding:20px;
+  overflow:auto;
+  border-right:1px solid #222;
+}
+
+.logo{
+  font-size:30px;
+  font-weight:bold;
+  margin-bottom:30px;
+  color:#4da3ff;
+}
+
+.nav-btn{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border:none;
+  border-radius:14px;
+  background:#1e2433;
+  color:white;
+  cursor:pointer;
+}
+
+.main{
+  flex:1;
+  overflow:auto;
+  padding:24px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.search{
+  width:320px;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:#1b2230;
+  color:white;
+}
+
+.hero{
+  background:linear-gradient(135deg,#4da3ff,#6c63ff);
+  padding:40px;
+  border-radius:24px;
+  margin-bottom:30px;
+}
+
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:22px;
+}
+
+.card{
+  background:#171d29;
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.card img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:16px;
+}
+
+.play-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#4da3ff;
+  color:white;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.player{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  flex-direction:column;
+  z-index:999;
+}
+
+.player-top{
+  background:#121212;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+iframe{
+  flex:1;
+  width:100%;
+  border:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+  <div class="logo">
+    GAME HUB
+  </div>
+
+  <button class="nav-btn" onclick="filterGames('All')">
+    All Games
+  </button>
+
+  <button class="nav-btn" onclick="filterGames('Arcade')">
+    Arcade
+  </button>
+
+  <button class="nav-btn" onclick="filterGames('Driving')">
+    Driving
+  </button>
+
+  <button class="nav-btn" onclick="filterGames('Sports')">
+    Sports
+  </button>
+
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+
+    <h2>Discover Games</h2>
+
+    <input
+      class="search"
+      id="search"
+      placeholder="Search games..."
+    >
+
+  </div>
+
+  <div class="hero">
+
+    <h1>My Arcade</h1>
+
+    <p>Play browser games instantly.</p>
+
+  </div>
+
+  <div class="games-grid" id="gamesGrid"></div>
+
+</div>
+
+<div class="player" id="player">
+
+  <div class="player-top">
+
+    <h3 id="playerTitle">
+      Game
+    </h3>
+
+    <button
+      class="close-btn"
+      onclick="closePlayer()"
+    >
+      Close
+    </button>
+
+  </div>
+
+  <iframe id="gameFrame"></iframe>
+
+</div>
+
+<script>
+
+const games = [
+
+  {
+    title:'Drive Mad',
+    category:'Driving',
+    image:'https://picsum.photos/400/200?1',
+    url:'https://ubg365.github.io/drivemad/'
+  },
+
+  {
+    title:'Run 3',
+    category:'Arcade',
+    image:'https://picsum.photos/400/200?2',
+    url:'https://ubg44.github.io/Run3/'
+  },
+
+  {
+    title:'Slope',
+    category:'Arcade',
+    image:'https://picsum.photos/400/200?3',
+    url:'https://ubg44.github.io/Slope-Game/'
+  },
+
+  {
+    title:'Retro Bowl',
+    category:'Sports',
+    image:'https://picsum.photos/400/200?4',
+    url:'https://ubg365.github.io/retro-bowl/'
+  },
+
+  {
+    title:'Tiny Fishing',
+    category:'Arcade',
+    image:'https://picsum.photos/400/200?5',
+    url:'https://ubg365.github.io/tiny-fishing/'
+  }
+
+];
+
+const grid = document.getElementById('gamesGrid');
+
+const search = document.getElementById('search');
+
+function renderGames(list){
+
+  grid.innerHTML = '';
+
+  list.forEach(game=>{
+
+    const card = document.createElement('div');
+
+    card.className = 'card';
+
+    card.innerHTML = `
+
+      <img src="${game.image}">
+
+      <div class="card-content">
+
+        <h3>${game.title}</h3>
+
+        <button class="play-btn">
+          PLAY NOW
+        </button>
+
+      </div>
+
+    `;
+
+    card.onclick = ()=>openGame(game.title, game.url);
+
+    grid.appendChild(card);
+  });
+}
+
+function openGame(title,url){
+
+  document.getElementById('player').style.display = 'flex';
+
+  document.getElementById('playerTitle').innerText = title;
+
+  document.getElementById('gameFrame').src = url;
+}
+
+function closePlayer(){
+
+  document.getElementById('player').style.display = 'none';
+
+  document.getElementById('gameFrame').src = '';
+}
+
+function filterGames(category){
+
+  if(category === 'All'){
+    renderGames(games);
+    return;
+  }
+
+  renderGames(
+    games.filter(g=>g.category===category)
+  );
+}
+
+search.addEventListener('input',()=>{
+
+  const value = search.value.toLowerCase();
+
+  renderGames(
+    games.filter(game=>
+      game.title.toLowerCase().includes(value)
+    )
+  );
+});
+
+
