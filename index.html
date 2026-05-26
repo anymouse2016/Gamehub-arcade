@@ -155,65 +155,13 @@ iframe{
     GAME HUB
   </div>
 
-  <button class="nav-btn" onclick="filterGames('All')">
-    All Games
-  </button>
-
-  <button class="nav-btn" onclick="filterGames('Arcade')">
-    Arcade
-  </button>
-
-  <button class="nav-btn" onclick="filterGames('Driving')">
-    Driving
-  </button>
-
-  <button class="nav-btn" onclick="filterGames('Sports')">
-    Sports
-  </button>
-
-</div>
-
-<div class="main">
-
-  <div class="topbar">
-
-    <h2>Discover Games</h2>
-
-    <input
-      class="search"
-      id="search"
-      placeholder="Search games..."
-    >
-
-  </div>
-
-  <div class="hero">
-
-    <h1>My Arcade</h1>
+ 
 
     <p>Play browser games instantly.</p>
 
   </div>
 
-  <div class="grid">
-
-  <div class="card"><a href="split%20games/drivemad/index.html">Drive Mad</a></div>
-  <div class="card"><a href="split%20games/doodlejump/index.html">Doodle Jump</a></div>
-  <div class="card"><a href="split%20games/crossyroad/index.html">Crossy Road</a></div>
-  <div class="card"><a href="split%20games/cuttherope/index.html">Cut the Rope</a></div>
-  <div class="card"><a href="split%20games/cuttheropeholiday/index.html">Cut the Rope Holiday</a></div>
-  <div class="card"><a href="split%20games/ducklife5/index.html">Duck Life 5</a></div>
-  <div class="card"><a href="split%20games/tinyfishing/index.html">Tiny Fishing</a></div>
-  <div class="card"><a href="split%20games/highwaytraffic/index.html">Highway Traffic</a></div>
-  <div class="card"><a href="split%20games/drifthunters/index.html">Drift Hunters</a></div>
-  <div class="card"><a href="split%20games/fridaynightfunkin/index.html">FNF</a></div>
-  <div class="card"><a href="split%20games/timeshooter3/index.html">Time Shooter 3</a></div>
-  <div class="card"><a href="split%20games/cookieclicker/index.html">Cookie Clicker</a></div>
-  <div class="card"><a href="split%20games/scrapmetal3/index.html">Scrap Metal 3</a></div>
-
-  
-</div>
-
+  <div class="games-grid" id="gamesGrid"></div>
 <div class="player" id="player">
 
   <div class="player-top">
@@ -237,44 +185,59 @@ iframe{
 
 <script>
 
+
 const games = [
+<script>
 
-  {
-    title:'Drive Mad',
-    category:'Driving',
-    image:'https://picsum.photos/400/200?1',
-    url:'https://ubg365.github.io/drivemad/'
-  },
-
-  {
-    title:'Run 3',
-    category:'Arcade',
-    image:'https://picsum.photos/400/200?2',
-    url:'https://ubg44.github.io/Run3/'
-  },
-
-  {
-    title:'Slope',
-    category:'Arcade',
-    image:'https://picsum.photos/400/200?3',
-    url:'https://ubg44.github.io/Slope-Game/'
-  },
-
-  {
-    title:'Retro Bowl',
-    category:'Sports',
-    image:'https://picsum.photos/400/200?4',
-    url:'https://ubg365.github.io/retro-bowl/'
-  },
-
-  {
-    title:'Tiny Fishing',
-    category:'Arcade',
-    image:'https://picsum.photos/400/200?5',
-    url:'https://ubg365.github.io/tiny-fishing/'
-  }
-
+const gameNames = [
+  "drivemad",
+  "crossyroad",
+  "cuttherope",
+  "cuttheropeholiday",
+  "ducklife5",
+  "tinyfishing",
+  "highwaytraffic",
+  "drifthunters",
+  "fridaynightfunkin",
+  "timeshooter3",
+  "cookieclicker",
+  "scrapmetal3"
 ];
+
+const grid = document.getElementById("gamesGrid");
+
+gameNames.forEach(name => {
+
+  const pretty =
+    name
+      .replace(/-/g," ")
+      .replace(/\b\w/g,l=>l.toUpperCase());
+
+  const card = document.createElement("div");
+
+  card.className = "card";
+
+  card.innerHTML = `
+    <div class="card-content">
+      <h3>${pretty}</h3>
+
+      <button class="play-btn">
+        PLAY
+      </button>
+    </div>
+  `;
+
+  card.onclick = () => {
+    window.location.href =
+      "split%20games/" + name + "/index.html";
+  };
+
+  grid.appendChild(card);
+
+});
+
+</script>
+
 
 const grid = document.getElementById('gamesGrid');
 
